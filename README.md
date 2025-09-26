@@ -1,38 +1,42 @@
 # Telemetry Anomaly Detection  
 
-This project explores **machine learning for anomaly detection in time-series data**, inspired by the challenges of **motorsport telemetry** and other high-performance systems. In environments like Formula 1, sensor data streams are fast, data-heavy, and critical — even small anomalies can mean the difference between success and failure.  
+**Goal**: Show how anomaly detection can spot unusual patterns in time-series telemetry, inspired by Formula 1 sensor data (like temperatures, pressures, or vibrations).
 
 ## Problem  
-Detect anomalies in sensor/time-series data (e.g., engine health, temperature, vibration). The goal is to identify unusual behavior early and reliably in order to prevent failures or performance loss.  
+Motorsport cars stream thousands of sensor values in real time. When something goes wrong, such as overheating, pressure drops, or sudden spikes, teams need to catch it fast. We can mimic this challenge using a public dataset with sensor readings over time and test different ways of detecting “strange” behavior.  
 
 ## Approach  
-- Collect or simulate telemetry-style time-series data (NASA turbofan engine dataset / IoT sensor data).  
-- Preprocess with **Pandas** and visualize with **Matplotlib**.  
-- Apply anomaly detection using **LSTM (Long Short-Term Memory)** networks and/or classical models like **Isolation Forest / XGBoost**.  
-- Evaluate with standard metrics (precision, recall, F1-score) to show effectiveness.  
+- Load telemetry-like data from the SKAB dataset
+- Focus on one signal (e.g., Temperature) as our demo channel.
+- Engineer simple rolling-window features (mean, standard deviation, short-term change) so models see context, not just raw values.
+- Apply two anomaly detection methods:
+  - **Rolling z-score (baseline)**: flag values that are far from the rolling average.
+  - **Isolation Forest (ML model)**: learn what “normal” looks like and flag outliers.
+- Compare their detections and visualize results on time-series charts.
 
 ## Tools & Technologies  
-- Python  
-- Pandas, NumPy  
-- TensorFlow / Scikit-learn  
+- Python, Pandas, NumPy
+- scikit-learn (Isolation Forest)
 - Matplotlib
 
 ## Results (in progress)  
-- Initial preprocessing and visualizations, model training, and evaluation are ongoing — results will be updated.
+Both methods flag unusual behavior in the signal.
+  - Z-score is simple but noisy.
+  - Isolation Forest captures broader context and produces cleaner anomaly flags.
+    
+Example anomalies flagged in the Temperature channel.
 
-## Roadmap  
-- [ ] Repo setup + preprocessing (Ongoing)  
-- [ ] Basic anomaly detection (Isolation Forest)  
-- [ ] LSTM implementation for sequence prediction  
-- [ ] Comparative analysis with metrics  
+**Isolation Forest detections:**
+![Isolation Forest result](anomaly_iforest.png) 
 
-## Repository Structure  
-telemetry-anomaly-detection/
-│── data/ # Sample datasets (or links if too large)
-│── notebooks/ # Jupyter notebooks for experiments
-│── images/ # Plots and visualizations
-│── src/ # Python scripts (if needed)
-│── README.md # Project overview
+**Z-score vs Isolation Forest comparison:**
+![Comparison](compare_iforest_zscore.png)
+
+## Roadmap going forward
+- Add an LSTM autoencoder for a deep learning perspective.
+- Extend to multiple sensor channels (temperature + pressure + vibration).
+- Evaluate models with precision/recall against SKAB’s ground-truth labels.
+- Wrap into a streaming pipeline to simulate real-time detection.
 
 ## Inspiration  
 Having worked on a research paper to do with **cybersecurity anomaly detection**, my interest in other applications, such as **motorsport telemetry analysis**, peaked, and I wanted to further explore the commonalities between the two. Both domains demand speed, accuracy, and resilience under pressure.  
